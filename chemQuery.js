@@ -8,39 +8,53 @@
     var MOLE = 6.02214e+23;
     var periodic_table = [
         {
-            element: 'Hydrogen',
+            element: 'hydrogen',
             symbol: 'H',
             atomic_number: 1,
             atomic_mass: 1.008,
             group: 1
         },
         {
-            element: 'Helium',
+            element: 'helium',
             symbol: 'He',
             atomic_number: 2,
             atomic_mass: 4.003,
             group: 18
         },
         {
-            element: 'Lithium',
+            element: 'lithium',
             symbol: 'Li',
             atomic_number: 3,
             atomic_mass: 6.941,
             group: 1
         },
         {
-            element: 'Beryllium',
+            element: 'beryllium',
             symbol: 'Be',
             atomic_number: 4,
             atomic_mass: 9.012,
             group: 2
         },
         {
-            element: 'Boron',
+            element: 'boron',
             symbol: 'B',
             atomic_number: 5,
             atomic_mass: 10.81,
             group: 13
+        },
+        {
+            element: 'carbon',
+            symbol: 'C',
+            atomic_number: 6,
+            atomic_mass: 12.01,
+            group: 14
+        },
+        {
+            element: 'nitrogen',
+            symbol: 'N',
+            atomic_number: 7,
+            atomic_mass: 14.01,
+            group: 15
         }
 
     ];
@@ -88,6 +102,31 @@
 
     };
 
+    //Utilities
+    var printPeriodicTable = function(){
+
+        var prop;
+        var periodicTable = $('<table></table>').addClass('periodic-table');
+            periodicTable.append('<tr></tr>');
+
+        for(prop in periodic_table){
+
+            var element = periodic_table[prop];
+            var atomicNumber = element.atomic_number;
+            var symbol = element.symbol;
+            var weight = element.atomic_mass;
+            var td = $('<td></td>');
+                td.append('<p class="atomic-number">' + atomicNumber + '</p>');
+                td.append('<p class="symbol">' + symbol + '</p>');
+                td.append('<p class="atomi-mass">' + weight + '</p>');
+
+            periodicTable.append(td);
+
+        }
+
+        return periodicTable;
+    };
+
 //stoichometric utilities
     var atomsFromGrams = function(element, grams){
         //divide by atomic mass and multiple by avogadros number;
@@ -107,14 +146,19 @@
     };
 
     c$['createElement'] = function(element){
-        return new Element(element);
+        var normalizedElement = element.toLowerCase();
+        return new Element(normalizedElement);
     };
 
     c$['atomsFromGrams'] = atomsFromGrams;
     c$['gramsFromAtoms'] = gramsFromAtoms;
+    c$['periodicTable'] = periodic_table;
+    c$['printPeriodicTable'] = printPeriodicTable;
 
-    var carbon = new Element('Hydrogen');
+    var carbon = new Element('hydrogen');
     console.info(carbon);
+
+
 
 
 // Expose chemQuery to the global object
