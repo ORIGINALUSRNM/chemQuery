@@ -1,8 +1,9 @@
 (function( window ){
 
-//local copy of chemQuery
-    var chemQuery = {};
-    var c$ = chemQuery;
+    // Define a local copy of chemQuery
+    var chemQuery = function( atom ) {
+        //return new jQuery.fn.init( selector, context, rootjQuery );
+    };
 
 //constants
     var MOLE = 6.02214e+23;
@@ -54,6 +55,7 @@
             symbol: 'N',
             atomic_number: 7,
             atomic_mass: 14.01,
+            group: 15
             group: 15
         }
 
@@ -150,10 +152,10 @@
         return new Element(normalizedElement);
     };
 
-    c$['atomsFromGrams'] = atomsFromGrams;
-    c$['gramsFromAtoms'] = gramsFromAtoms;
-    c$['periodicTable'] = periodic_table;
-    c$['printPeriodicTable'] = printPeriodicTable;
+    chemQuery['atomsFromGrams'] = atomsFromGrams;
+    chemQuery['gramsFromAtoms'] = gramsFromAtoms;
+    chemQuery['periodicTable'] = periodic_table;
+    chemQuery['printPeriodicTable'] = printPeriodicTable;
 
     var carbon = new Element('hydrogen');
     console.info(carbon);
