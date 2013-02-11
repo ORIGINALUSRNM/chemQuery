@@ -56,7 +56,6 @@
             atomic_number: 7,
             atomic_mass: 14.01,
             group: 15
-            group: 15
         }
 
     ];
@@ -147,6 +146,7 @@
         return moles * element.atomic_mass;
     };
 
+    /*
     c$['createElement'] = function(element){
         var normalizedElement = element.toLowerCase();
         return new Element(normalizedElement);
@@ -159,7 +159,7 @@
 
     var carbon = new Element('hydrogen');
     console.info(carbon);
-
+    */
 
 
 
