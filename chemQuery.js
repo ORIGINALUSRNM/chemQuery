@@ -1,11 +1,13 @@
 (function( window ){
 
     // Define a local copy of chemQuery
-    var chemQuery = function( atom ) {
-        //return new jQuery.fn.init( selector, context, rootjQuery );
+    var chemQuery = function( matter ) {
+        //there should be a general "matter" function that creates matter:atom(s), solutions, etc. 
+        //anything with more then one atem will be virtual ( no separate atom objects for each atom );
+        return chemQuery.fn.init( matter );
     };
 
-//constants
+    //constants
     var MOLE = 6.02214e+23;
     var periodic_table = [
         {
@@ -60,7 +62,7 @@
 
     ];
 
-//Element Constructor
+    //Element Constructor
     var Element = function(element){
         //if nuetrons are given as option then the appropriate isotope is created
         //otherwise a random isotope is generated based upon percent occurrence on earth.
@@ -103,67 +105,70 @@
 
     };
 
-    //Utilities
-    var printPeriodicTable = function(){
+    chemQuery.fn  = {
+        init: function( matter ){
+           
+            //create a single atom
+            if( typeof matter === 'string' && arguments.length == 1 ){
+                return new Element(matter);
+            }
 
-        var prop;
-        var periodicTable = $('<table></table>').addClass('periodic-table');
-            periodicTable.append('<tr></tr>');
+        },
 
-        for(prop in periodic_table){
+    };
 
-            var element = periodic_table[prop];
-            var atomicNumber = element.atomic_number;
-            var symbol = element.symbol;
-            var weight = element.atomic_mass;
-            var td = $('<td></td>');
-                td.append('<p class="atomic-number">' + atomicNumber + '</p>');
-                td.append('<p class="symbol">' + symbol + '</p>');
-                td.append('<p class="atomi-mass">' + weight + '</p>');
+    //need to create an extend method to add utility methods to chemQuery and to allow others to extend it.
+    chemQuery.extend = chemQuery.fn.extend = function() {
+        var options = arguments[0];
+        var target = chemQuery;
 
-            periodicTable.append(td);
-
+        for(prop in options){
+            target[prop] = options[prop];
         }
-
-        return periodicTable;
     };
 
-//stoichometric utilities
-    var atomsFromGrams = function(element, grams){
-        //divide by atomic mass and multiple by avogadros number;
-        var moles = grams/element.atomic_mass;
-        var atoms;
-        try{
-            return moles * MOLE;
-        }catch(e){
-            throw "Too many atoms for javascript to calculate";
+    chemQuery.extend({
+        printPeriodicTable : function( container ){
+            var prop;
+            var periodicTable = $('<table></table>').addClass('periodic-table');
+                periodicTable.append('<tr></tr>');
+
+            for(prop in periodic_table){
+
+                var element = periodic_table[prop];
+                var atomicNumber = element.atomic_number;
+                var symbol = element.symbol;
+                var weight = element.atomic_mass;
+                var td = $('<td></td>');
+                    td.append('<p class="atomic-number">' + atomicNumber + '</p>');
+                    td.append('<p class="symbol">' + symbol + '</p>');
+                    td.append('<p class="atomi-mass">' + weight + '</p>');
+
+                periodicTable.append(td);
+
+            }
+
+            $(container).html(periodicTable);
+        },
+
+        atomsFromGrams : function(element, grams){
+            //divide by atomic mass and multiple by avogadros number;
+            var moles = grams/element.atomic_mass;
+            var atoms;
+            try{
+                return moles * MOLE;
+            }catch(e){
+                throw "Too many atoms for javascript to calculate";
+            }
+
+        },
+
+        gramsFromAtoms : function(element, atoms){
+            var moles = atoms/MOLE;
+            return moles * element.atomic_mass;
         }
-
-    };
-
-    var gramsFromAtoms = function(element, atoms){
-        var moles = atoms/MOLE;
-        return moles * element.atomic_mass;
-    };
-
-    /*
-    c$['createElement'] = function(element){
-        var normalizedElement = element.toLowerCase();
-        return new Element(normalizedElement);
-    };
-
-    chemQuery['atomsFromGrams'] = atomsFromGrams;
-    chemQuery['gramsFromAtoms'] = gramsFromAtoms;
-    chemQuery['periodicTable'] = periodic_table;
-    chemQuery['printPeriodicTable'] = printPeriodicTable;
-
-    var carbon = new Element('hydrogen');
-    console.info(carbon);
-    */
-
-
-
+    });
 // Expose chemQuery to the global object
-    window.chemQuery = window.c$ = chemQuery;
+    window.chemQuery = window.$c = chemQuery;
 
 })( window );
